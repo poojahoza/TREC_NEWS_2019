@@ -126,16 +126,23 @@ public class SearchUtils {
         JSONArray queries = (JSONArray) turns.get("contents");
         for(int i = 0; i < queries.size(); i++){
             JSONObject paraObj = (JSONObject) queries.get(i);
-            if(paraObj.containsKey("subtype")) {
-                String paragraph_text = paraObj.get("content").toString()+" ";
-                String paragraph_id = getMD5Hash(paragraph_text);
+            /*if(article_id.equals("5f8dadba-0279-11e2-8102-ebee9c66e190")){
+                System.out.println("=========");
+                System.out.println(queries);
+                System.out.println(paraObj);
+                System.out.println("=========");
+            }*/
+            if(paraObj != null) {
+                if (paraObj.containsKey("subtype")) {
+                    String paragraph_text = paraObj.get("content").toString() + " ";
+                    String paragraph_id = getMD5Hash(paragraph_text);
 
-                Map<String, String> paragraph = new LinkedHashMap<>();
-                paragraph.put(paragraph_id, paragraph_text);
-                query_list.put(article_id, paragraph);
+                    Map<String, String> paragraph = new LinkedHashMap<>();
+                    paragraph.put(paragraph_id, paragraph_text);
+                    query_list.put(article_id, paragraph);
 
+                }
             }
-
         }
     }
 
