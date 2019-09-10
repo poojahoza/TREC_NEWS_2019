@@ -10,8 +10,9 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.FSDirectory;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -142,35 +143,24 @@ public class SearchUtils {
         Map<String, Map<String, String>> queries = new LinkedHashMap<>();
         JSONParser jsonParser = new JSONParser();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(fname)))
-        {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fname))) {
+
             //Read JSON file
-            System.out.println(reader);
-            String json = "";
-            StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
 
             while (line != null) {
-                sb.append(line);
-                sb.append("\n");
+
+                Object obj = jsonParser.parse(line);
+                parseJSON((JSONObject)obj, queries);
                 line = reader.readLine();
             }
-            json = sb.toString();
-            Object obj = jsonParser.parse(json);
-
-
-            JSONArray employeeList = (JSONArray) obj;
-            //System.out.println(employeeList);
-            //JSONObject employeeObject = (JSONObject) employeeList.get("employee");
-            employeeList.forEach( emp -> parseJSON( (JSONObject) emp, queries) );
-            System.out.println(queries);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+        }catch (ParseException po) {
+            po.printStackTrace();
         }
         return queries;
     }
