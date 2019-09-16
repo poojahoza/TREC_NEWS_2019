@@ -1,12 +1,12 @@
 package main.java.indexer;
 
-/*Lucene imports*/
 
 import edu.unh.cs.TrecCarParagraph;
 import edu.unh.cs.lucene.TrecCarLuceneConfig;
 import edu.unh.cs.treccar_v2.Data;
 import main.java.utils.IndexUtils;
 import main.java.utils.SearchUtils;
+import main.java.dbpedia.DBpediaWebAPIClient;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -16,18 +16,16 @@ import org.apache.lucene.index.IndexWriter;
 import java.io.IOException;
 import java.util.Map;
 
-/*TREC tools imports*/
-/*Project specific imports*/
-/*Java specific imports*/
-
 
 public class IndexBuilder
 {
     private final IndexWriter indexWriter;
     private static int increment=0;
+    private DBpediaWebAPIClient dBpediaWebAPIClient;
 
     public IndexBuilder(String indexDir) throws IOException {
         indexWriter = IndexUtils.createIndexWriter(indexDir);
+        dBpediaWebAPIClient = new DBpediaWebAPIClient();
     }
 
 
@@ -76,10 +74,13 @@ public class IndexBuilder
 
                     doc.add(new StringField("ArticleId",article.getKey() , Field.Store.YES));
                     doc.add(new StringField("ParaId",paragraph.getKey() , Field.Store.YES));
-                    doc.add(new TextField("Body", paragraph.getValue(), Field.Store.YES));
+                    doc.add(new TextField("Text", paragraph.getValue(), Field.Store.YES));
+
+                    String entities = dBpediaWebAPIClient.getEntities(paragraph.getValue());
+                    doc.add(new StringField("EntityIds",entities , Field.Store.YES));
                     indexWriter.addDocument(doc);
                     increment++;
-                    System.out.println("article id : "+article.getKey()+" "+Integer.toString(increment));
+                    System.out.println("article id in indexbuilder: "+article.getKey()+" "+Integer.toString(increment));
 
                     //commit the Data after incrementFactorVariable paragraph
 
