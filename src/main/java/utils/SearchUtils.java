@@ -160,6 +160,9 @@ public class SearchUtils {
                 Object obj = jsonParser.parse(line);
                 parseJSON((JSONObject)obj, queries);
                 line = reader.readLine();
+                /*if(queries.size() >= 5){
+                    return queries;
+                }*/
             }
 
         } catch (FileNotFoundException e) {

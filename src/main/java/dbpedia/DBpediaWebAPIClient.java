@@ -14,24 +14,23 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DBpediaWebAPIClient {
 
     private final String API_URL = "http://api.dbpedia-spotlight.org/";
-    private final double CONFIDENCE = 0.0;
-    private final int SUPPORT = 0;
+
 
     private String getDBpediaEntities(String input_text){
 
         String dbpedia_response;
         String entities_list = "";
+        GetMethod getMethod;
+
 
         try {
 
             HttpClient httpClient = new HttpClient();
-            GetMethod getMethod = new GetMethod(API_URL + "en/annotate/?" +
+            getMethod = new GetMethod(API_URL + "en/annotate/?" +
                     "text=" + URLEncoder.encode(input_text, "utf-8"));
             getMethod.addRequestHeader(new Header("Accept", "application/json"));
             System.out.println(getMethod.getURI());
@@ -54,11 +53,13 @@ public class DBpediaWebAPIClient {
                     System.out.println(entities_list);
                 }
             }
+            getMethod.releaseConnection();
         }catch (IOException ioe){
             ioe.printStackTrace();
         }catch (ParseException pe){
             pe.printStackTrace();
         }
+        System.out.println(entities_list);
         return entities_list;
     }
 
