@@ -17,7 +17,8 @@ import java.net.URLEncoder;
 
 public class DBpediaWebAPIClient {
 
-    private final String API_URL = "http://api.dbpedia-spotlight.org/";
+    //private final String API_URL = "http://api.dbpedia-spotlight.org/";
+    private final String API_URL = "http://localhost:2222/";
 
 
     private String getDBpediaEntities(String input_text){
@@ -30,7 +31,9 @@ public class DBpediaWebAPIClient {
         try {
 
             HttpClient httpClient = new HttpClient();
-            getMethod = new GetMethod(API_URL + "en/annotate/?" +
+            /*getMethod = new GetMethod(API_URL + "en/annotate/?" +
+                    "text=" + URLEncoder.encode(input_text, "utf-8"));*/
+            getMethod = new GetMethod(API_URL + "rest/annotate/?" +
                     "text=" + URLEncoder.encode(input_text, "utf-8"));
             getMethod.addRequestHeader(new Header("Accept", "application/json"));
             System.out.println(getMethod.getURI());
