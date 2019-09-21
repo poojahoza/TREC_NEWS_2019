@@ -7,6 +7,7 @@ import edu.unh.cs.treccar_v2.Data;
 import main.java.utils.IndexUtils;
 import main.java.utils.SearchUtils;
 import main.java.dbpedia.DBpediaWebAPIClient;
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -66,6 +67,7 @@ public class IndexBuilder
 
                 });*/
         Map<String, Map<String, String>> input_data = SearchUtils.readJSONfile(cborLoc);
+        HttpClient httpClient = new HttpClient();
         for(Map.Entry<String, Map<String, String>> article: input_data.entrySet()){
             for(Map.Entry<String, String> paragraph: article.getValue().entrySet()){
                 try {
@@ -76,7 +78,7 @@ public class IndexBuilder
                     doc.add(new StringField("ParaId",paragraph.getKey() , Field.Store.YES));
                     doc.add(new TextField("Text", paragraph.getValue(), Field.Store.YES));
 
-                    String entities = dBpediaWebAPIClient.getEntities(paragraph.getValue());
+                    String entities = dBpediaWebAPIClient.getEntities(paragraph.getValue(), httpClient);
                     doc.add(new StringField("EntityIds",entities , Field.Store.YES));
                     indexWriter.addDocument(doc);
                     increment++;

@@ -21,21 +21,29 @@ public class DBpediaWebAPIClient {
     private final String API_URL = "http://localhost:2222/";
 
 
-    private String getDBpediaEntities(String input_text){
+    private String getDBpediaEntities(String input_text, HttpClient httpClient){
 
         String dbpedia_response;
         String entities_list = "";
-        GetMethod getMethod;
+        String encoded_url = "";
+        try {
+             encoded_url = URLEncoder.encode(input_text, "utf-8");
+        }catch (UnsupportedEncodingException use){
+            use.printStackTrace();
+        }
+        GetMethod getMethod = new GetMethod(API_URL + "rest/annotate/?" +
+                "text=" + encoded_url);
+        getMethod.addRequestHeader(new Header("Accept", "application/json"));;
 
 
         try {
 
-            HttpClient httpClient = new HttpClient();
+
             /*getMethod = new GetMethod(API_URL + "en/annotate/?" +
                     "text=" + URLEncoder.encode(input_text, "utf-8"));*/
-            getMethod = new GetMethod(API_URL + "rest/annotate/?" +
+            /*getMethod = new GetMethod(API_URL + "rest/annotate/?" +
                     "text=" + URLEncoder.encode(input_text, "utf-8"));
-            getMethod.addRequestHeader(new Header("Accept", "application/json"));
+            getMethod.addRequestHeader(new Header("Accept", "application/json"));*/
             System.out.println(getMethod.getURI());
 
             httpClient.executeMethod(getMethod);
@@ -56,18 +64,20 @@ public class DBpediaWebAPIClient {
                     System.out.println(entities_list);
                 }
             }
-            getMethod.releaseConnection();
+            //getMethod.releaseConnection();
         }catch (IOException ioe){
             ioe.printStackTrace();
         }catch (ParseException pe){
             pe.printStackTrace();
+        }finally {
+            getMethod.releaseConnection();
         }
         System.out.println(entities_list);
         return entities_list;
     }
 
-    public String getEntities(String text){
-        return getDBpediaEntities(text);
+    public String getEntities(String text, HttpClient httpClient){
+        return getDBpediaEntities(text, httpClient);
     }
 
 
