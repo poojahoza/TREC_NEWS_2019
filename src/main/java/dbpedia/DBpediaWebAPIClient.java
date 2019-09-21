@@ -4,6 +4,8 @@ package main.java.dbpedia;
  * @author poojaoza
  **/
 
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.apache.commons.httpclient.Header;
@@ -31,7 +33,9 @@ public class DBpediaWebAPIClient {
         }catch (UnsupportedEncodingException use){
             use.printStackTrace();
         }
-        GetMethod getMethod = new GetMethod(API_URL + "rest/annotate/?" +
+        SimpleHttpConnectionManager connManager=new SimpleHttpConnectionManager(true);
+        HttpClient client=new HttpClient(connManager);
+        HttpMethod getMethod = new GetMethod(API_URL + "rest/annotate/?" +
                 "text=" + encoded_url);
         getMethod.addRequestHeader(new Header("Accept", "application/json"));;
 
@@ -46,7 +50,8 @@ public class DBpediaWebAPIClient {
             getMethod.addRequestHeader(new Header("Accept", "application/json"));*/
             System.out.println(getMethod.getURI());
 
-            httpClient.executeMethod(getMethod);
+            //httpClient.executeMethod(getMethod);
+            client.executeMethod(getMethod);
 
             dbpedia_response = getMethod.getResponseBodyAsString();
             JSONParser jsonParser = new JSONParser();
@@ -71,6 +76,7 @@ public class DBpediaWebAPIClient {
             pe.printStackTrace();
         }finally {
             getMethod.releaseConnection();
+            ((SimpleHttpConnectionManager)client.getHttpConnectionManager()).shutdown();
         }
         System.out.println(entities_list);
         return entities_list;
