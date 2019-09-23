@@ -402,8 +402,7 @@ public class FeatureGenerator {
 
     private Map<String, Double[]> generateFeatureVectors(Map<String, Integer> entities_list,
                                                          String query_id,
-                                                         Map<String, Map<String, Container>> bm25_ranking,
-                                                         Map<String, Map<String, Double[]>> entity_ranking){
+                                                         Map<String, Map<String, Container>> bm25_ranking){
         Map<String, Map<String, Double[]>> entities_features = new LinkedHashMap<>();
         Map<String, Double[]> entities_normalized_features = new LinkedHashMap<>();
         Entities entities_utils = new Entities();
@@ -415,31 +414,31 @@ public class FeatureGenerator {
             entities_ids[i] = entities_array.get(i);
         }
 
-        databaseWrapper dbwrapper = new databaseWrapper();
-        Map<String, String[]> entities_details = dbwrapper.getRecordDetails(entities_ids);
+        //databaseWrapper dbwrapper = new databaseWrapper();
+        //Map<String, String[]> entities_details = dbwrapper.getRecordDetails(entities_ids);
 
         //System.out.println(cursor.length());
         int entity_length = entities_ids.length;
         //System.out.println("entity length : "+entity_length);
-        Double hop_relations[] = new Double[] {0.0, 0.0, 0.0, 0.0, 0.0};
+        //Double hop_relations[] = new Double[] {0.0, 0.0, 0.0, 0.0, 0.0};
         //double co_mention[] = new double[]{0.0, 0.0};
 
         //Map<String, Double[]> other_entities = new LinkedHashMap<>();
         for(int c = 0; c < entity_length; c++){
             //System.out.println(entities_features);
             Map<String, Double[]> other_entities = new LinkedHashMap<>();
-            double get1hoprelation_calc = 0.0;
-            double get2hoprelation_calc = 0.0;
+            //double get1hoprelation_calc = 0.0;
+            //double get2hoprelation_calc = 0.0;
             double comention_calc = 0.0;
             double rel_comention_cal = 0.0;
-            double getoutlinksrelation_calc = 0.0;
-            double getinlinksrelation_calc = 0.0;
-            double getbidirlinksrelation_calc = 0.0;
-            double getbiblorelev_calc = 0.0;
-            double getbiblocount_calc = 0.0;
-            double getcocoupcount_calc = 0.0;
-            double getcocouprel_calc = 0.0;
-            double getispredpattrel = 0.0;
+            //double getoutlinksrelation_calc = 0.0;
+            //double getinlinksrelation_calc = 0.0;
+            //double getbidirlinksrelation_calc = 0.0;
+            //double getbiblorelev_calc = 0.0;
+            //double getbiblocount_calc = 0.0;
+            //double getcocoupcount_calc = 0.0;
+            //double getcocouprel_calc = 0.0;
+            //double getispredpattrel = 0.0;
 
 
             for(int e = 0; e < entity_length; e++){
@@ -447,7 +446,7 @@ public class FeatureGenerator {
                 if(e == c){
                     continue;
                 }
-                double[] features_list = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+                double[] features_list = new double[] {0.0, 0.0};
 
                 if(entities_features.containsKey(entities_array.get(e))){
 
@@ -456,39 +455,39 @@ public class FeatureGenerator {
                     if(other_entities_val.containsKey(entities_array.get(c))){
 
                         Double[] val = other_entities_val.get(entities_array.get(c));
-                        get1hoprelation_calc += val[0].doubleValue();
-                        get2hoprelation_calc += val[1].doubleValue();
-                        rel_comention_cal += val[2].doubleValue();
-                        comention_calc += val[3].doubleValue();
+                        //get1hoprelation_calc += val[0].doubleValue();
+                        //get2hoprelation_calc += val[1].doubleValue();
+                        rel_comention_cal += val[0].doubleValue();
+                        comention_calc += val[1].doubleValue();
                         /*getoutlinksrelation_calc += val[4].doubleValue();
                         getinlinksrelation_calc += val[5].doubleValue();*/
-                        getoutlinksrelation_calc += val[5].doubleValue();
-                        getinlinksrelation_calc += val[4].doubleValue();
+                        //getoutlinksrelation_calc += val[5].doubleValue();
+                        //getinlinksrelation_calc += val[4].doubleValue();
 
-                        getbidirlinksrelation_calc += val[6].doubleValue();
-                        getbidirlinksrelation_calc += val[7].doubleValue();
-                        getbiblorelev_calc += val[8].doubleValue();
-                        getcocoupcount_calc += val[9].doubleValue();
-                        getcocouprel_calc += val[10].doubleValue();
-                        getispredpattrel = val[11].doubleValue();
+                        //getbidirlinksrelation_calc += val[6].doubleValue();
+                        //getbidirlinksrelation_calc += val[7].doubleValue();
+                        //getbiblorelev_calc += val[8].doubleValue();
+                        //getcocoupcount_calc += val[9].doubleValue();
+                        //getcocouprel_calc += val[10].doubleValue();
+                        //getispredpattrel = val[11].doubleValue();
 
                         features_list[0] = val[0].doubleValue();
                         features_list[1] = val[1].doubleValue();
-                        features_list[2] = val[2].doubleValue();
-                        features_list[3] = val[3].doubleValue();
+                        //features_list[2] = val[2].doubleValue();
+                        //features_list[3] = val[3].doubleValue();
 
                         /*features_list[4] += val[4].doubleValue();
                         features_list[5] += val[5].doubleValue();*/
 
-                        features_list[4] += val[5].doubleValue();
-                        features_list[5] += val[4].doubleValue();
+                        //features_list[4] += val[5].doubleValue();
+                        //features_list[5] += val[4].doubleValue();
 
-                        features_list[6] += val[6].doubleValue();
-                        features_list[7] += val[7].doubleValue();
-                        features_list[8] += val[8].doubleValue();
-                        features_list[9] += val[9].doubleValue();
-                        features_list[10] += val[10].doubleValue();
-                        features_list[11] += val[11].doubleValue();
+                        //features_list[6] += val[6].doubleValue();
+                        //features_list[7] += val[7].doubleValue();
+                        //features_list[8] += val[8].doubleValue();
+                        //features_list[9] += val[9].doubleValue();
+                        //features_list[10] += val[10].doubleValue();
+                        //features_list[11] += val[11].doubleValue();
 
                         //System.out.println("=="+entities_array.get(e)+" "+entities_array.get(c)+" "+features_list[0]+" "+features_list[1]+" "+get1hoprelation_calc+" "+get2hoprelation_calc+" "+comention_calc);
                         /*if(entities_array.get(c).equals("enwiki:Ernst%20Antevs") || entities_array.get(c).equals("enwiki:Holocene") || entities_array.get(c).equals("enwiki:Paleobotany") ||
@@ -509,22 +508,22 @@ public class FeatureGenerator {
                     other_entities.put(entities_array.get(e), ArrayUtils.toObject(features_list));
                 }
                 else{
-                    hop_relations[0] = 0.0;
-                    hop_relations[1] = 0.0;
-                    hop_relations[2] = 0.0;
-                    hop_relations[3] = 0.0;
-                    hop_relations[4] = 0.0;
+                    //hop_relations[0] = 0.0;
+                    //hop_relations[1] = 0.0;
+                    //hop_relations[2] = 0.0;
+                    //hop_relations[3] = 0.0;
+                    //hop_relations[4] = 0.0;
 
                     /*co_mention[0] = 0.0;
                     co_mention[1] = 0.0;*/
 
-                    hop_relations = getHopRelations(entities_array.get(c), entities_array.get(e), entities_details, hop_relations);
+                    //hop_relations = getHopRelations(entities_array.get(c), entities_array.get(e), entities_details, hop_relations);
                     //features_list[2] = entityCoMentions(entities_array.get(c), entities_array.get(e), bm25_ranking.get(query_id));
                     double co_mention[] = entityCoMentions(entities_array.get(c), entities_array.get(e), bm25_ranking.get(query_id));
-                    double biblo_relations[] = getBibloCouplingFeatures(entities_array.get(c), entities_array.get(e), entities_details, entity_ranking.get(query_id));
-                    double cocoupling_relations[] = getCoCouplingFeatures(entities_array.get(c), entities_array.get(e), entities_details, entity_ranking.get(query_id));
-                    getispredpattrel = entityIsPredPattRelation(entities_array.get(c), entities_array.get(e), bm25_ranking.get(query_id));
-                    features_list[0] = hop_relations[0]; //undirected direct links
+                    //double biblo_relations[] = getBibloCouplingFeatures(entities_array.get(c), entities_array.get(e), entities_details, entity_ranking.get(query_id));
+                    //double cocoupling_relations[] = getCoCouplingFeatures(entities_array.get(c), entities_array.get(e), entities_details, entity_ranking.get(query_id));
+                    //getispredpattrel = entityIsPredPattRelation(entities_array.get(c), entities_array.get(e), bm25_ranking.get(query_id));
+                    /*features_list[0] = hop_relations[0]; //undirected direct links
                     features_list[1] = hop_relations[1];
                     features_list[2] = co_mention[0]; //co-occurrence relevance
                     features_list[3] = co_mention[1]; //co-occurrence count
@@ -535,19 +534,22 @@ public class FeatureGenerator {
                     features_list[8] = biblo_relations[1];
                     features_list[9] = cocoupling_relations[0];
                     features_list[10] = cocoupling_relations[1];
-                    features_list[11] = getispredpattrel;
+                    features_list[11] = getispredpattrel;*/
 
-                    get1hoprelation_calc += features_list[0];
-                    get2hoprelation_calc += features_list[1];
-                    rel_comention_cal += features_list[2];
-                    comention_calc += features_list[3];
-                    getoutlinksrelation_calc += features_list[4];
-                    getinlinksrelation_calc += features_list[5];
-                    getbidirlinksrelation_calc += features_list[6];
-                    getbiblorelev_calc += features_list[7];
-                    getbiblocount_calc += features_list[8];
-                    getcocoupcount_calc += features_list[9];
-                    getcocouprel_calc += features_list[10];
+                    features_list[0] = co_mention[0]; //co-occurrence relevance
+                    features_list[1] = co_mention[1]; //co-occurrence count
+
+                    //get1hoprelation_calc += features_list[0];
+                    //get2hoprelation_calc += features_list[1];
+                    rel_comention_cal += features_list[0];
+                    comention_calc += features_list[1];
+                    //getoutlinksrelation_calc += features_list[4];
+                    //getinlinksrelation_calc += features_list[5];
+                    //getbidirlinksrelation_calc += features_list[6];
+                    //getbiblorelev_calc += features_list[7];
+                    //getbiblocount_calc += features_list[8];
+                    //getcocoupcount_calc += features_list[9];
+                    //getcocouprel_calc += features_list[10];
                     //System.out.println(entities_array.get(c)+" "+entities_array.get(e)+" "+features_list[0]+" "+features_list[1]+" "+get1hoprelation_calc+" "+get2hoprelation_calc+" "+comention_calc);
                     other_entities.put(entities_array.get(e), ArrayUtils.toObject(features_list));
                     /*if(entities_array.get(c).equals("enwiki:Ernst%20Antevs") || entities_array.get(c).equals("enwiki:Holocene") || entities_array.get(c).equals("enwiki:Paleobotany") ||
@@ -585,18 +587,19 @@ public class FeatureGenerator {
             //System.out.println("Features : "+query_id+" "+entities_array.get(c)+" "+entity_length+" "+get1hoprelation_calc+" "+rel_comention_cal+" "+comention_calc+" "+getbiblorelev_calc+" "+
               //      getbiblocount_calc+" "+getoutlinksrelation_calc+" "+getinlinksrelation_calc+" "+getbidirlinksrelation_calc);
 
-            entities_normalized_features.put(entities_array.get(c), new Double[] {get1hoprelation_calc/entity_length,
+            entities_normalized_features.put(entities_array.get(c), new Double[] {//get1hoprelation_calc/entity_length,
                     //get2hoprelation_calc/entity_length,
                     rel_comention_cal/entity_length,
                     comention_calc/entity_length,
-                    getcocoupcount_calc/entity_length,
-                    getcocouprel_calc/entity_length,
-                    getbiblorelev_calc/entity_length,
-                    getbiblocount_calc/entity_length,
-                    getoutlinksrelation_calc/entity_length,
-                    getinlinksrelation_calc/entity_length,
-                    getbidirlinksrelation_calc/entity_length,
-                    getispredpattrel});
+                    //getcocoupcount_calc/entity_length,
+                    //getcocouprel_calc/entity_length,
+                    //getbiblorelev_calc/entity_length,
+                    //getbiblocount_calc/entity_length,
+                    //getoutlinksrelation_calc/entity_length,
+                    //getinlinksrelation_calc/entity_length,
+                    //getbidirlinksrelation_calc/entity_length,
+                    //getispredpattrel
+            });
             //System.out.println("Features : "+query_id+" "+c+" "+entity_length+" "+get1hoprelation_calc/entity_length+" "+get2hoprelation_calc/entity_length+" "+rel_comention_cal/entity_length+" "+comention_calc/entity_length);
         }
 
@@ -605,8 +608,7 @@ public class FeatureGenerator {
 
 
     public Map<String, Map<String, Double[]>> getFeatureVectors(Map<String, Map<String, Integer>> query_entity_list,
-                                                                 Map<String, Map<String, Container>> bm25_ranking,
-                                                                Map<String, Map<String, Double[]>> entity_ranking){
+                                                                 Map<String, Map<String, Container>> bm25_ranking){
         //System.out.println(query_entity_list.size());
         int p = 0;
         Map<String, Map<String, Double[]>> query_entity_feature_vec = new ConcurrentHashMap<>();
@@ -621,7 +623,7 @@ public class FeatureGenerator {
 
 
         query_entity_list.entrySet().parallelStream().forEach(m ->
-        { query_entity_feature_vec.put(m.getKey(), generateFeatureVectors(m.getValue(), m.getKey(), bm25_ranking, entity_ranking));});
+        { query_entity_feature_vec.put(m.getKey(), generateFeatureVectors(m.getValue(), m.getKey(), bm25_ranking));});
 
         /*query_entity_list.entrySet().parallelStream().forEach(m ->
         {
@@ -639,11 +641,10 @@ public class FeatureGenerator {
     }
 
     public Map<String, Map<String, Double[]>> getNormalizedFeatureVectors(Map<String, Map<String, Integer>> query_entity_list,
-                                                                       Map<String, Map<String, Container>> bm25_ranking,
-                                                                          Map<String, Map<String, Double[]>> entity_ranking){
+                                                                       Map<String, Map<String, Container>> bm25_ranking){
 
         Map<String, Map<String, Double[]>> query_entity_normalized_vec;
-        query_entity_normalized_vec = getFeatureVectors(query_entity_list, bm25_ranking, entity_ranking);
+        query_entity_normalized_vec = getFeatureVectors(query_entity_list, bm25_ranking);
         query_entity_normalized_vec = new Stats().normalizeData(query_entity_normalized_vec);
         return query_entity_normalized_vec;
     }

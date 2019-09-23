@@ -24,6 +24,8 @@ public class ProjectMain {
                 orchestrator.run();
 
             } else if (parser.getParser().getParsedCommand().equals("search")) {
+                orchestrator = new SearchOrchestrator(parser);
+                orchestrator.run();
             } else if (parser.getParser().getParsedCommand().equals("ranker")) {
             } else {
                 parser.getParser().usage();

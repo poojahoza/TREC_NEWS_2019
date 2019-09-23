@@ -67,8 +67,15 @@ public class IndexBuilder
 
                 });*/
         Map<String, Map<String, String>> input_data = SearchUtils.readJSONfile(cborLoc);
-        HttpClient httpClient = new HttpClient();
+        //HttpClient httpClient = new HttpClient();
+        int total_paras = 0;
         for(Map.Entry<String, Map<String, String>> article: input_data.entrySet()){
+            for(Map.Entry<String, String> paragraph: article.getValue().entrySet()){
+                total_paras += 1;
+            }
+        }
+        System.out.println("Total paragraphs : "+total_paras);
+        /*for(Map.Entry<String, Map<String, String>> article: input_data.entrySet()){
             for(Map.Entry<String, String> paragraph: article.getValue().entrySet()){
                 try {
                     int incrementFactor=10000;
@@ -96,7 +103,7 @@ public class IndexBuilder
 
             }
 
-        }
+        }*/
         closeIndexWriter();
     }
 

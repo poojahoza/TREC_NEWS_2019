@@ -58,13 +58,13 @@ public class BaseBM25 extends BaseSearcher
         for(ScoreDoc s:scoreDocs)
         {
             Document rankedDoc = searcher.doc(s.doc);
-            String paraId = rankedDoc.getField("Id").stringValue();
-            String entity = rankedDoc.getField("EntityLinks").stringValue();
-            String entityId = rankedDoc.getField("OutlinkIds").stringValue();
+            String articleId = rankedDoc.getField("ArticleId").stringValue();
+            String paraId = rankedDoc.getField("ParaId").stringValue();
+            String entity = rankedDoc.getField("EntityIds").stringValue();
             //String text = rankedDoc.getField("Text").stringValue();
             //Container that holds all the information
             Container c = new Container((double) s.score,s.doc);
-            c.addEntityContainer(new EntityContainer(entity, entityId));
+            c.addEntityContainer(new EntityContainer(articleId, entity));
             c.setRank(para_rank);
             createRankingQueryDocPair(queryId, paraId,c);
             para_rank++;

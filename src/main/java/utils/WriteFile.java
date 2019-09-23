@@ -55,7 +55,7 @@ public class WriteFile {
             for(Map.Entry<String, T> n: m.getValue().entrySet())
             {
                 rank += 1;
-                rankings.add(m.getKey() + " Q0 " + n.getKey() +" "+String.valueOf(rank)+" "+n.getValue().toString()+ " trec_cast_2019");
+                rankings.add(m.getKey() + " Q0 " + n.getKey() +" "+String.valueOf(rank)+" "+n.getValue().toString()+ " unh-trema-news");
             }
             try {
                 Files.write(file, rankings, Charset.forName("UTF-8"), StandardOpenOption.APPEND);

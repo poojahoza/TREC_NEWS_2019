@@ -465,13 +465,46 @@ public class Entities {
 
     }
 
+    public Map<String, Map<String, Double>> getRelatedEntities(Map<String, Map<String, Double>> scored_entities,
+                                                                      Map<String, Map<String, String>> given_entities){
+        Map<String, Map<String, Double>> final_entities = new LinkedHashMap<>();
+
+        for(Map.Entry<String, Map<String, Double>> m : scored_entities.entrySet()) {
+            Map<String, String> temp = given_entities.get(m.getKey());
+            Map<String, Double> given_temp = m.getValue();
+            Map<String, Double> temp_entity_list = new LinkedHashMap<>();
+
+            for(Map.Entry<String, String> t: temp.entrySet()){
+                boolean exists = false;
+                for(Map.Entry<String, Double> n: given_temp.entrySet()){
+                    if(t.getValue().equalsIgnoreCase(n.getKey().toLowerCase())){
+                        temp_entity_list.put(t.getKey(), n.getValue());
+                        exists = true;
+                    }
+                }
+                if(exists == false){
+                    temp_entity_list.put(t.getKey(), 0.0);
+                }
+            }
+
+            /*for(Map.Entry<String, Double> n: given_temp.entrySet()){
+                for(Map.Entry<String, String> t: temp.entrySet()){
+                    if(t.getValue().equalsIgnoreCase(n.getKey().toLowerCase())){
+                        temp_entity_list.put(t.getKey(), n.getValue());
+                    }
+                }
+            }*/
+            final_entities.put(m.getKey(),temp_entity_list);
+        }
+        return final_entities;
+    }
+
 
     /*taken from sortUtils*/
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValueWithLimit(Map<K, V> map) {
         return map.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-                .limit(100)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
